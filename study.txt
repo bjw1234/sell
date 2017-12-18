@@ -1,0 +1,222 @@
+1.mock假数据
+  // 加载express模块
+  const express = require('express')
+  // 创建server
+  const app = express()
+  const appData = require('../data.json')
+  const seller = appData.seller
+  const goods = appData.goods
+  const ratings = appData.ratings
+
+  // 定义路由
+  const apiRoutes = express.Router()
+
+  // 在api这个路径下使用路由
+  app.use('/api', apiRoutes)
+
+   // 在devServer下定义返回给客户端的数据
+   before (app) {
+      app.get('/api/seller', (req, res) => {
+        res.json({
+          errno: 0,
+          data: seller
+        })
+      })
+      ......
+    }
+
+2.vue组件
+   *  1.定义这个组件
+   *  2.用import导入这个组件
+   *  3.在components中声明这个组件
+
+3.对于分号的配置
+  在.eslintrc.js文件中
+  'semi': ['error', 'always']
+
+4.vue-router使用
+  // 安装
+  npm install vue-router
+
+  // 导入
+  import VueRouter from 'vue-router'
+
+  // 全局注册
+  Vue.use(VueRouter)
+
+  (1).定义路由
+  const routes = [
+    {path: '/', redirect: 'goods'},    // 重定向
+    {path:'/goods',component:goods},
+    {path:'/ratings',component:ratings}
+  ];
+
+  (2).创建路由实例
+  const router = new VueRouter({
+      routes
+  });
+
+  (3).注入路由
+  new Vue({
+    el:'#app',
+    router
+    ....
+  });
+
+5.伪类和伪元素
+  伪类用于向某些选择器添加特殊的效果。
+  伪元素用于将特殊的效果添加到某些选择器。
+
+  伪类有：:first-child ，:link，vistited，:hover，:active，:focus，:lang
+  伪元素有：:first-line，:first-letter，:before，:after
+
+6. 1px边框问题
+  1.通过伪类设置1px的边框
+  2.添加border-1px这个类
+
+  媒体查询
+  @media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
+    .border-1px
+      &::after   // 通过伪元素设置缩放
+        -webkit-transform: scaleY(0.7)
+        transform: scaleY(0.7)
+  dpr=2,dpr=3...
+
+7.vue-resource的使用
+  导入  注册
+  this.$http.get('/api/seller').then( (response) => {
+    // 获取服务器返回的json对象
+    response = response.body;
+    if(response.errno === ERROR_OK) {
+      业务处理.....
+    }
+  });
+
+8.半透模糊背景
+  1.先写一个半透明的背景
+  2.给其下层添加一张图片
+  .background
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: -1
+    filter: blur(10px)      // 设置模糊程度
+
+9.sticky footer
+    <div class="detail" v-show="detailShow">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main"></div>
+      </div>
+      <div class="detail-close"></div>
+    </div>
+    1.detail-wrapper设置最小高度
+      detail-main设置padding-bottom
+    2.detail-close设置负的margin-top  clear:both
+
+10.vue过渡动画
+    1.给想添加动画的内容外面包一层transition组件
+      <transition name="fade">
+        <div class="content-wrapper">content....</div>
+      </transition>
+    2. .content-wrapper
+        width:100px
+        ...
+        &.fade-enter-active,&.fade-leave-active
+        transition: all .5s
+        xxxx  // 作用于全局动画
+        &.fade-enter,&.fade-leave-to
+        xxxx  // 进入之前和离开之后的状态
+        &.fade-enter-to,&.fade-leave
+        xxxx  // 进入之后和离开之前的状态
+   3.感想：
+        直接在样式中定义进入之后效果  在 &.fade-enter,&.fade-leave-to
+    中添加进入之前样式
+
+11.给弹出层添加模糊背景
+  backdrop-filter: blur(10px)
+
+12.flex
+  flex: 0 0 200px;  // 剩余空间不放大，空间不够不缩小，固定宽度200px
+  flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为0 1 auto。
+
+13.better-scroll 库的使用
+  注意：
+   【1】.必须在文档加载完毕之后使用
+      this.$nextTick(()=>{
+          ......
+      });
+   【2】.当内容改变时可以调用  this.scroll.refresh();同【1】
+  1.下载 引入
+    npm install better-scroll --save-dev
+    import BScroll from 'better-scroll';
+  2.使用
+     this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+          click: true   // 可以获取点击事件
+     });
+     this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+          probeType: 3  // 可以实时获取position
+     });
+     // 实时拿到滚动的Y值
+     this.foodsScroll.on('scroll', (pos) => {
+         this.scrollY = Math.abs(Math.round(pos.y));
+     });
+
+14.用vue操作dom元素
+  在想获取的节点上添加该属性：ref="menuWrapper"
+  然后通过 const dom = this.$refs.menuWrapper;
+
+15.使用css类的一个小技巧
+:class="{'current':currentIndex===index}
+
+16.vue给某一个对象添加新属性
+ Vue.set(this.food, 'count', 1)  // 添加一个count属性，并赋值为1
+
+ 17.子组件给父组件通知信息
+   1.子组件在某个事件中
+   this.$emit("cartAdd",event.target);
+   2.在父组件中
+   <x-template @cartAdd="cartAddEvent"></x-template>
+   3.定义事件
+   methods:{
+   cartAddEvent(target){
+      console.log(xxxxxxx);
+      }
+   }
+
+ 18.在父组件中调用某个子组件的函数
+  1.给子组件添加 ref="shopcart"
+  2.在父组件中调用这个方法
+  this.$refs.shopcart.function(xxx);
+
+19.通过一个方法给data中的某些属性赋值
+    data () {
+      return {
+        favorite: (() => {    // 通过一个自执行的方法
+          return loadFromLocal(this.seller.id, 'favorite', false);
+        })()
+      };
+    },
+
+20.组件状态保留
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
+    在使用vue-router进行组件切换时，组件的状态不会被保留，并且会重复发送ajx
+  请求，重新渲染加载数据，那么在使用 keep-alive这个组件后，组件状态会被vue保存
+  在内存中，方便使用。
+
+21.vue动画  js钩子函数
+<transition @before-enter="beforeEnter" @enter="enterDone" @after-enter="afterEnter">
+   beforeEnter(el){}
+   enterDone(el,done){
+      //这里的done事件尤为重要
+      //当transition动画执行完毕之后调用done事件
+      el.addEventListener('transitionend', done);
+   }
+   afterEnter(el){}
+
+22.Invalid Host Header 解决方法
+      在webpack.dev.conf.js中的devServer中添加
+   disableHostCheck: true

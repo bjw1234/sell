@@ -21,7 +21,7 @@ const ratings = appData.ratings
 const apiRoutes = express.Router()
 
 // 在api这个路径下使用路由
-app.use('/sell/api', apiRoutes)
+app.use('/api', apiRoutes)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {

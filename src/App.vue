@@ -37,7 +37,7 @@
       };
     },
     created () {
-      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
+      this.$http.get('sell/api/seller?id=' + this.seller.id).then((response) => {
         response = response.body;
         if (response.errno === ERROR_OK) {
 //          this.seller = response.data;

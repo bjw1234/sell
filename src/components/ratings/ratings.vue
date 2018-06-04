@@ -71,7 +71,7 @@
     },
     created () {
       const _this = this;
-      this.$http.get('/api/ratings').then((response) => {
+      this.$http.get('/sell/api/ratings').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
           _this.ratings = response.data;
